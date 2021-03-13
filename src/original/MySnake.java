@@ -6,10 +6,11 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
+import player.Player;
 
 public class MySnake extends JPanel implements ActionListener {
                                                         //init Objects
-    private Player me = new Player();
+    private Player me = null;
     private Hindernis hind = new Hindernis(1);
     private Hindernis hind2 = new Hindernis(2);
     private Hindernis hind3 = new Hindernis(3);
@@ -47,9 +48,9 @@ public class MySnake extends JPanel implements ActionListener {
         } catch (Exception e){
             e.printStackTrace();
         }
-        if(PlayerSpeed == 1){upspeed = downspeed = 1;}
-        if(PlayerSpeed == 2){upspeed = 2; downspeed = 1;}
-        if(PlayerSpeed == 3){upspeed = 2; downspeed = 2;}
+        if(PlayerSpeed == 1){upspeed = downspeed = 1; me =  new Player(400,310,upspeed,downspeed);}
+        if(PlayerSpeed == 2){upspeed = 2; downspeed = 1; me =  new Player(400,310,upspeed,downspeed);}
+        if(PlayerSpeed == 3){upspeed = 2; downspeed = 2; me =  new Player(400,310,upspeed,downspeed);}
         backgr = Color.getHSBColor(0.6f, 0.8f, 0.97f/2);
         setBackground(backgr);                                    //init JPanel properties
         setFocusable(true);
@@ -96,8 +97,8 @@ public class MySnake extends JPanel implements ActionListener {
             g.drawImage(bg2, bgp2, -80, this);
             g.drawImage(bg2, bgp2 + 800, -80, this);
         }
-        g.setColor(Color.yellow);
-        g.fillRect(me.x, me.y, 10, 10);                   //Player rendern
+        g.setColor(me.getColor());
+        g.fillRect(me.getPosX(), me.getPosY(), 10, 10);                   //Player rendern
 
         int abstnd = 30;
         for (int i = 0; i < health.count; i++){                                 //Herzen rendern
@@ -224,22 +225,22 @@ public class MySnake extends JPanel implements ActionListener {
 
                                                 //jump mechanic
 
-        if(me.up && me.y >= 250){
-            me.setY(me.y - upspeed);
-        }
-
-        if (me.y == 250){
-            me.up = false;
-            me.down = true;
-        }
-
-        if (me.down && me.y < 310){
-            me.setY(me.y + downspeed);
-        }
-
-        if(me.down && me.y == 310){
-            me.down = false;
-        }
+//        if(me.up && me.y >= 250){
+//            me.setY(me.y - upspeed);
+//        }
+//
+//        if (me.y == 250){
+//            me.up = false;
+//            me.down = true;
+//        }
+//
+//        if (me.down && me.y < 310){
+//            me.setY(me.y + downspeed);
+//        }
+//
+//        if(me.down && me.y == 310){
+//            me.down = false;
+//        }
 
         hind.Hx -= 1;                                   //Hindernisse bewegen
         hind2.Hx -= 1;
@@ -327,12 +328,10 @@ public class MySnake extends JPanel implements ActionListener {
         gameover = true;
     }
         
-    static int cnt=0;
     @Override
     public void actionPerformed(ActionEvent e){
         doStuff();
         repaint();
-        System.out.println(cnt++);
     }
 
     private class TAdapter extends KeyAdapter {
@@ -376,39 +375,39 @@ public class MySnake extends JPanel implements ActionListener {
 
     }
 
-    class Player{
-
-        int x;
-        int y;
-        boolean up;
-        boolean down;
-        Image icon;
-
-
-        Player(){
-            x = 400;
-            y = 310;
-            up = false;
-            down = false;
-            icon = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/com/sebi/dot.png")).getImage();
-        }
-
-        void jump() {
-            if (!this.up && !this.down) {
-                this.up = true;
-            }
-
-        }
-
-        /*void setX(int _x){      //probably redundant bc it's never used
-            this.x = _x;
-        }*/
-
-        void setY(int _y){
-            this.y = _y;
-        }
-
-    }
+//    class Player{
+//
+//        int x;
+//        int y;
+//        boolean up;
+//        boolean down;
+//        Image icon;
+//
+//
+//        Player(){
+//            x = 400;
+//            y = 310;
+//            up = false;
+//            down = false;
+//            icon = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/com/sebi/dot.png")).getImage();
+//        }
+//
+//        void jump() {
+//            if (!this.up && !this.down) {
+//                this.up = true;
+//            }
+//
+//        }
+//
+//        /*void setX(int _x){      //probably redundant bc it's never used
+//            this.x = _x;
+//        }*/
+//
+//        void setY(int _y){
+//            this.y = _y;
+//        }
+//
+//    }
 
 
     class Hindernis{
