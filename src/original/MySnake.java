@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
 import player.Player;
-
+import gameSpeed.GameLevel;
 public class MySnake extends JPanel implements ActionListener {
                                                         //init Objects
     private Player me = null;
@@ -39,7 +39,7 @@ public class MySnake extends JPanel implements ActionListener {
     enum SUNSTATE {sunUp, sunDown, moonUp, moonDown}
 
 
-    MySnake(int PlayerSpeed){
+    MySnake(GameLevel level){
         try{
             URL resource = MySnake.class.getResource("bg1.png");
             bg1 = ImageIO.read(resource);
@@ -48,9 +48,10 @@ public class MySnake extends JPanel implements ActionListener {
         } catch (Exception e){
             e.printStackTrace();
         }
-        if(PlayerSpeed == 1){upspeed = downspeed = 1; me =  new Player(400,310,upspeed,downspeed);}
-        if(PlayerSpeed == 2){upspeed = 2; downspeed = 1; me =  new Player(400,310,upspeed,downspeed);}
-        if(PlayerSpeed == 3){upspeed = 2; downspeed = 2; me =  new Player(400,310,upspeed,downspeed);}
+        me =  new Player(400,310,level.upSpeed,level.downSpeed);
+//        if(PlayerSpeed == 1){upspeed = downspeed = 1; me =  new Player(400,310,level.upSpeed,level.downSpeed);}
+//        if(PlayerSpeed == 2){upspeed = 2; downspeed = 1; me =  new Player(400,310,upspeed,downspeed);}
+//        if(PlayerSpeed == 3){upspeed = 2; downspeed = 2; me =  new Player(400,310,upspeed,downspeed);}
         backgr = Color.getHSBColor(0.6f, 0.8f, 0.97f/2);
         setBackground(backgr);                                    //init JPanel properties
         setFocusable(true);

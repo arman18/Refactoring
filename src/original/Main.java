@@ -1,5 +1,7 @@
 package original;
 
+import gameSpeed.*;
+import gameSpeed.GameLevel;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -29,21 +31,21 @@ public class Main {
 
             public void actionPerformed(ActionEvent e){
                 fr.dispose();                                       //starting the game with PlayerSpeed 1
-                game(1);
+                game(new Slow());
             }
         });
 
         medium.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 fr.dispose();                                       //starting the game with PlayerSpeed up = 2, down =1
-                game(2);
+                game(new Medium());
             }
         });
 
         fast.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 fr.dispose();                                       //starting the game with PlayerSpeed 2
-                game(3);
+                game(new Fast());
 
             }
         });
@@ -64,10 +66,10 @@ public class Main {
 
     }
 
-    private static void game(int PlayerSpeed){
+    private static void game(GameLevel level){
         Frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   //initializing basic stuff like position and size
         Frame.setSize(800,400);
-        Frame.add(new MySnake(PlayerSpeed));                       //add the custom JPanel
+        Frame.add(new MySnake(level));                       //add the custom JPanel
         Frame.setIconImage(new ImageIcon("src/com/sebi/dot.png").getImage());   //trying to add an ImageIcon, succeeded in my IDE, but as soon as I compiled the Jar, it stopped working
         Frame.setResizable(false);
         Frame.setVisible(true);             //setVisible AFTER adding the JPanel
