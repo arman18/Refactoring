@@ -15,6 +15,7 @@ public class SunUpIdle extends SunState{
     
     public SunUpIdle(Sun owner){
         this.owner = owner;
+        this.next = new SunDown(owner);
     }
     
     @Override
@@ -24,7 +25,8 @@ public class SunUpIdle extends SunState{
 
     @Override
     void calculateXY() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        owner.x--;
+        if(owner.x<= 315) owner.changeState(next);
     }
     
 }

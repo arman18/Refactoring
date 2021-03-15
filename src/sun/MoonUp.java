@@ -1,17 +1,17 @@
-
 package sun;
 
 import java.awt.Color;
 
-public class SunUpState extends SunState{
-    public SunUpState(Sun owner){
+public class MoonUp extends SunState{
+    
+    public MoonUp(Sun owner){
         this.owner = owner;
-        this.next = new SunUpIdle(owner);
+        this.next = new MoonIdle(owner);
     }
 
     @Override
     Color getColor() {
-        return Color.yellow;
+        return Color.white;
     }
 
     @Override
@@ -20,4 +20,5 @@ public class SunUpState extends SunState{
         owner.y--;
         if(owner.y-owner.size<=30) owner.changeState(next);
     }
+    
 }

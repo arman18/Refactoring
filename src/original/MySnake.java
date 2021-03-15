@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.net.URL;
 import player.Player;
 import gameSpeed.GameLevel;
@@ -12,10 +11,11 @@ import health.Health;
 import health.HealthSymbol;
 import hindernis.Hind;
 import java.util.Vector;
+import sun.Sun;
 public class MySnake extends JPanel implements ActionListener {
                                                         //init Objects
     private Player me = null;
-    private Sun sun = new Sun();
+    private Sun sun = new Sun(800,400);
     private BufferedImage bg1;
     private BufferedImage bg2;
     private int bgp1 = 0;
@@ -36,7 +36,7 @@ public class MySnake extends JPanel implements ActionListener {
     private int count = 0;
 
     private Vector<Hind> hinds = new Vector<Hind>(3);
-    private Health helth;
+    private Health health;
     private HealthSymbol helthSymbol;
     enum SUNSTATE {sunUp, sunDown, moonUp, moonDown}
     
@@ -64,7 +64,7 @@ public class MySnake extends JPanel implements ActionListener {
         hinds.get(0).Hx = 600;
         hinds.get(1).Hx = 800;
         hinds.get(2).Hx = 1200;
-        helth = new Health();
+        health = new Health();
         timer = new Timer(5, this);
         timer.start();
     }
@@ -93,7 +93,7 @@ public class MySnake extends JPanel implements ActionListener {
         super.paintComponent(g);
 
 
-        g.setColor(sun.color);
+        g.setColor(sun.getColor());
         g.fillOval(sun.x - sun.size, sun.y - sun.size, sun.size, sun.size);
         if( Main.parallaxscrolling ) {
             g.drawImage(bg1, bgp1, -80, this);
@@ -105,11 +105,11 @@ public class MySnake extends JPanel implements ActionListener {
         g.fillRect(me.getPosX(), me.getPosY(), 10, 10);                   //Player rendern
 
 
-        helthSymbol = helth.getSymbol();
+        helthSymbol = health.getSymbol();
         while(helthSymbol!=null){
             g.setColor(helthSymbol.getColor());
             g.fillPolygon(helthSymbol.getXpoints(), helthSymbol.getYpoints(), 13);
-            helthSymbol = helth.getSymbol();
+            helthSymbol = health.getSymbol();
         }
         for(int i=0;i<hinds.capacity();i++){
             Hind tempHind = hinds.get(i);
@@ -186,20 +186,9 @@ public class MySnake extends JPanel implements ActionListener {
                                                     //sonnenzyklus
 
         if(count % 1.5 == 0){
-            if ( sun.state == SUNSTATE.sunUp && sunIdle < 1){ sun.y -= 1; sun.x -= 1;}
-            if ( sun.state == SUNSTATE.sunDown){ sun.y += 1; sun.x -= 1;}
-            if ( sun.state == SUNSTATE.moonUp  && sunIdle < 1){ sun.y -= 1; sun.x -= 1;}
-            if ( sun.state == SUNSTATE.moonDown){sun.y += 1; sun.x -= 1;}
-            if ( sunIdle > 0){
-                sun.x -= 1;
-                if (sun.x <= 315){
-                    sunIdle = 0;
-                    if (sun.state == SUNSTATE.sunUp){sun.state = SUNSTATE.sunDown;}
-                    if (sun.state == SUNSTATE.moonUp){sun.state = SUNSTATE.moonDown;}
-                }
-            }
+            sun.changePosition();
         }
-
+        
         if(count % 4 == 0){
             bgp1 -= 1;
         }
@@ -224,7 +213,7 @@ public class MySnake extends JPanel implements ActionListener {
 
         if (collision()) {                  //player fuer 12 ticks imun machen
             if (!imune) {
-                helth.decrease();
+                health.decrease();
                 imune = true;
                 iters = count;
             }
@@ -234,36 +223,11 @@ public class MySnake extends JPanel implements ActionListener {
             imune = false;
         }
 
-        if (helth.getLevel() == 0){      //wenn tot, gameOver
+        if (health.getLevel() == 0){      //wenn tot, gameOver
             gameOver();
         }
 
 
-        if (sun.state == SUNSTATE.sunUp && sun.y - sun.size == 30){   //sonne oben angekommen
-            sunIdle = 1;
-        } else {
-
-            if (sun.state == SUNSTATE.sunDown && sun.y + sun.size >= 400){  //sonne unten angekommen
-                sun.state = SUNSTATE.moonUp;
-                sun.color = Color.white;
-                sun.x = 800;
-                sun.y = 400;
-            } else {
-
-                if (sun.state == SUNSTATE.moonUp && sun.y - sun.size == 30){     //moon oben angekommen
-                    sunIdle = 1;
-                } else {
-
-                    if (sun.state == SUNSTATE.moonDown && sun.y - sun.size == 400){ //moon unten angekommen
-                        sun.state = SUNSTATE.sunUp;
-                        sun.color = Color.yellow;
-                        sun.x = 800;
-                        sun.y = 400;
-                    }
-
-                }
-            }
-        }     //endof ifs
                                                                                 //update Text in Console
 //        debugDisplay.setText("H1: " + hind1.Hx + System.lineSeparator()
 //                + "H2: " + hind2.Hx + System.lineSeparator()
@@ -324,7 +288,7 @@ public class MySnake extends JPanel implements ActionListener {
                 count = 0;
                 iters = 0;
                 gameover = false;
-                helth.restart();
+                health.restart();
                 timer.start();
             }
 
@@ -332,25 +296,6 @@ public class MySnake extends JPanel implements ActionListener {
                 System.exit(0);
             }
 
-        }
-
-    }
-
-
-    class Sun{
-
-        int x;
-        int y;
-        int size;
-        Color color;
-        SUNSTATE state;
-
-        Sun(){
-            x = 800;
-            y = 400;
-            size = 50;
-            state = SUNSTATE.moonUp;
-            color = Color.white;
         }
 
     }
