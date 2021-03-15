@@ -8,12 +8,14 @@ import java.io.File;
 import java.net.URL;
 import player.Player;
 import gameSpeed.GameLevel;
+import hindernis.Hind;
+import java.util.Vector;
 public class MySnake extends JPanel implements ActionListener {
                                                         //init Objects
     private Player me = null;
-    private Hindernis hind = new Hindernis(1);
-    private Hindernis hind2 = new Hindernis(2);
-    private Hindernis hind3 = new Hindernis(3);
+//    private Hindernis hind1 = new Hindernis(1);
+//    private Hindernis hind2 = new Hindernis(2);
+//    private Hindernis hind3 = new Hindernis(3);
     private Health health = new Health();
     private Sun sun = new Sun();
     private BufferedImage bg1;
@@ -36,8 +38,10 @@ public class MySnake extends JPanel implements ActionListener {
     private int count = 0;
     private int upspeed;
     private int downspeed;
+    private Vector<Hind> hinds = new Vector<Hind>(3);
+    
     enum SUNSTATE {sunUp, sunDown, moonUp, moonDown}
-
+    
 
     MySnake(GameLevel level){
         try{
@@ -59,9 +63,15 @@ public class MySnake extends JPanel implements ActionListener {
         addKeyListener(new TAdapter());
         setPreferredSize(new Dimension(800, 400));
         initConsole();
-        hind.Hx = 600;
-        hind2.Hx = 800;
-        hind3.Hx = 1200;
+        hinds.add(new Hind(1,Color.green));
+        hinds.add(new Hind(2,Color.green.darker()));
+        hinds.add(new Hind(3,Color.green.darker().darker()));
+        hinds.get(0).Hx = 600;
+        hinds.get(1).Hx = 800;
+        hinds.get(2).Hx = 1200;
+//        hind1.Hx = 600;
+//        hind2.Hx = 800;
+//        hind3.Hx = 1200;
         timer = new Timer(5, this);
         timer.start();
     }
@@ -110,13 +120,19 @@ public class MySnake extends JPanel implements ActionListener {
             g.setColor(Color.decode("#C91010"));
             g.fillPolygon(xPoints, yPoints, 13);
         }
+//        System.out.println(hinds.capacity());
+        for(int i=0;i<hinds.capacity();i++){
+            Hind tempHind = hinds.get(i);
+            g.setColor(tempHind.getColor());
+            g.fillRect(tempHind.getPosX(), tempHind.getPosY(), tempHind.Hw, 400);
+        }
 
-        g.setColor(Color.green);
-        g.fillRect(hind.Hx, hind.Hy, hind.Hw, 400);       //Hindernisse Rendern
-        g.setColor(Color.green.darker());
-        g.fillRect(hind2.Hx, hind2.Hy, hind2.Hw, 400);
-        g.setColor(Color.green.darker().darker());
-        g.fillRect(hind3.Hx, hind3.Hy, hind3.Hw, 400);
+//        g.setColor(Color.green);
+//        g.fillRect(hind1.Hx, hind1.Hy, hind1.Hw, 400);       //Hindernisse Rendern
+//        g.setColor(Color.green.darker());
+//        g.fillRect(hind2.Hx, hind2.Hy, hind2.Hw, 400);
+//        g.setColor(Color.green.darker().darker());
+//        g.fillRect(hind3.Hx, hind3.Hy, hind3.Hw, 400);
         g.setColor(Color.orange);
         g.fillRect(0, 320, 800, 399);                     //Boden rendern
         if(Main.parallaxscrolling) {
@@ -141,19 +157,27 @@ public class MySnake extends JPanel implements ActionListener {
 
 
     private boolean collision(){
-        if (hind.Hx < me.x + 10 && me.x + 10 < hind.Hx + hind.Hw){      //check for each obstacle
-            if (me.y + 11 >= hind.Hy){
+    for(int i=0;i<hinds.capacity();i++){
+        Hind tempHind = hinds.get(i);
+        if (tempHind.Hx < me.x + 10 && me.x + 10 < tempHind.Hx + tempHind.Hw){      //check for each obstacle
+            if (me.y + 11 >= tempHind.Hy){
                 return true;
             }
         }
-        if (hind2.Hx < me.x + 10 && me.x + 10 < hind2.Hx + hind2.Hw){
-            if (me.y + 11 >= hind2.Hy){
-                return true;
-            }
-        }
-        if (hind3.Hx < me.x + 10 && me.x + 10 < hind3.Hx + hind3.Hw){
-            return me.y + 11 >= hind3.Hy;
-        }
+    }
+//        if (hind1.Hx < me.x + 10 && me.x + 10 < hind1.Hx + hind1.Hw){      //check for each obstacle
+//            if (me.y + 11 >= hind1.Hy){
+//                return true;
+//            }
+//        }
+//        if (hind2.Hx < me.x + 10 && me.x + 10 < hind2.Hx + hind2.Hw){
+//            if (me.y + 11 >= hind2.Hy){
+//                return true;
+//            }
+//        }
+//        if (hind3.Hx < me.x + 10 && me.x + 10 < hind3.Hx + hind3.Hw){
+//            return me.y + 11 >= hind3.Hy;
+//        }
 
         return false;
     }
@@ -243,24 +267,25 @@ public class MySnake extends JPanel implements ActionListener {
 //            me.down = false;
 //        }
 
-        hind.Hx -= 1;                                   //Hindernisse bewegen
-        hind2.Hx -= 1;
-        hind3.Hx -= 1;
+        //------------------------------Hind-----------------------
+//        hind1.Hx -= 1;                                   //Hindernisse bewegen
+//        hind2.Hx -= 1;
+//        hind3.Hx -= 1;
 
-        if ((hind.Hx + hind.Hw) < 0){                       //wenn hindernisse aus dem Bild, dann neue Position generieren
-            hind.Hx = generateNewPosition(1);
-            hind.Hy = 300 - ((int) (Math.random() * 7))*3;
-        }
-
-        if ((hind2.Hx + hind2.Hw) < 0){
-            hind2.Hx = generateNewPosition(2);
-            hind2.Hy = 300 - ((int) (Math.random() * 7))*3;
-        }
-
-        if ((hind3.Hx + hind3.Hw) < 0){
-            hind3.Hx = generateNewPosition(3);
-            hind3.Hy = 300 - ((int) (Math.random() * 7))*3;
-        }
+//        if ((hind1.Hx + hind1.Hw) < 0){                       //wenn hindernisse aus dem Bild, dann neue Position generieren
+//            hind1.Hx = generateNewPosition(1);
+//            hind1.Hy = 300 - ((int) (Math.random() * 7))*3;
+//        }
+//
+//        if ((hind2.Hx + hind2.Hw) < 0){
+//            hind2.Hx = generateNewPosition(2);
+//            hind2.Hy = 300 - ((int) (Math.random() * 7))*3;
+//        }
+//
+//        if ((hind3.Hx + hind3.Hw) < 0){
+//            hind3.Hx = generateNewPosition(3);
+//            hind3.Hy = 300 - ((int) (Math.random() * 7))*3;
+//        }
 
         if (collision()) {                  //player fuer 12 ticks imun machen
             if (!imune) {
@@ -305,16 +330,16 @@ public class MySnake extends JPanel implements ActionListener {
             }
         }     //endof ifs
                                                                                 //update Text in Console
-        debugDisplay.setText("H1: " + hind.Hx + System.lineSeparator()
-                + "H2: " + hind2.Hx + System.lineSeparator()
-                + "H3: " + hind3.Hx + System.lineSeparator()
-				+ "S:  " + count + System.lineSeparator()
-                + "P:  " + me.y + System.lineSeparator()
-                + "HP: " + health.count + System.lineSeparator()
-                + "DN: " + darker + System.lineSeparator()
-                + "p1: " + bgp1 + System.lineSeparator()
-                + "p2: " + bgp2 + System.lineSeparator()
-        );
+//        debugDisplay.setText("H1: " + hind1.Hx + System.lineSeparator()
+//                + "H2: " + hind2.Hx + System.lineSeparator()
+//                + "H3: " + hind3.Hx + System.lineSeparator()
+//				+ "S:  " + count + System.lineSeparator()
+//                + "P:  " + me.y + System.lineSeparator()
+//                + "HP: " + health.count + System.lineSeparator()
+//                + "DN: " + darker + System.lineSeparator()
+//                + "p1: " + bgp1 + System.lineSeparator()
+//                + "p2: " + bgp2 + System.lineSeparator()
+//        );
 
     }
 
