@@ -15,10 +15,6 @@ import java.util.Vector;
 public class MySnake extends JPanel implements ActionListener {
                                                         //init Objects
     private Player me = null;
-//    private Hindernis hind1 = new Hindernis(1);
-//    private Hindernis hind2 = new Hindernis(2);
-//    private Hindernis hind3 = new Hindernis(3);
-//    private Health health = new Health();
     private Sun sun = new Sun();
     private BufferedImage bg1;
     private BufferedImage bg2;
@@ -38,8 +34,7 @@ public class MySnake extends JPanel implements ActionListener {
     private int sunIdle = 0;
     private int iters = 0;
     private int count = 0;
-//    private int upspeed;
-//    private int downspeed;
+
     private Vector<Hind> hinds = new Vector<Hind>(3);
     private Health helth;
     private HealthSymbol helthSymbol;
@@ -56,9 +51,6 @@ public class MySnake extends JPanel implements ActionListener {
             e.printStackTrace();
         }
         me =  new Player(400,310,level.upSpeed,level.downSpeed);
-//        if(PlayerSpeed == 1){upspeed = downspeed = 1; me =  new Player(400,310,level.upSpeed,level.downSpeed);}
-//        if(PlayerSpeed == 2){upspeed = 2; downspeed = 1; me =  new Player(400,310,upspeed,downspeed);}
-//        if(PlayerSpeed == 3){upspeed = 2; downspeed = 2; me =  new Player(400,310,upspeed,downspeed);}
         backgr = Color.getHSBColor(0.6f, 0.8f, 0.97f/2);
         setBackground(backgr);                                    //init JPanel properties
         setFocusable(true);
@@ -73,9 +65,6 @@ public class MySnake extends JPanel implements ActionListener {
         hinds.get(1).Hx = 800;
         hinds.get(2).Hx = 1200;
         helth = new Health();
-//        hind1.Hx = 600;
-//        hind2.Hx = 800;
-//        hind3.Hx = 1200;
         timer = new Timer(5, this);
         timer.start();
     }
@@ -115,15 +104,7 @@ public class MySnake extends JPanel implements ActionListener {
         g.setColor(me.getColor());
         g.fillRect(me.getPosX(), me.getPosY(), 10, 10);                   //Player rendern
 
-//        int abstnd = 30;
-//        for (int i = 0; i < health.count; i++){                                 //Herzen rendern
-//            int[] xPoints = {i * abstnd, i * abstnd,  12+i*abstnd, 15+i*abstnd,
-//                    27+i*abstnd, 27+i*abstnd, 23+i*abstnd, 16+i*abstnd, 16+i*abstnd,
-//                    11+i*abstnd, 11+i*abstnd , 4+i*abstnd, i * abstnd};
-//            int[] yPoints = {5, 15, 26, 26, 15,  5,  0,  0,  1, 1,  0  , 0, 5};
-//            g.setColor(Color.decode("#C91010"));
-//            g.fillPolygon(xPoints, yPoints, 13);
-//        }
+
         helthSymbol = helth.getSymbol();
         while(helthSymbol!=null){
             g.setColor(helthSymbol.getColor());
@@ -136,12 +117,7 @@ public class MySnake extends JPanel implements ActionListener {
             g.fillRect(tempHind.getPosX(), tempHind.getPosY(), tempHind.Hw, 400);
         }
 
-//        g.setColor(Color.green);
-//        g.fillRect(hind1.Hx, hind1.Hy, hind1.Hw, 400);       //Hindernisse Rendern
-//        g.setColor(Color.green.darker());
-//        g.fillRect(hind2.Hx, hind2.Hy, hind2.Hw, 400);
-//        g.setColor(Color.green.darker().darker());
-//        g.fillRect(hind3.Hx, hind3.Hy, hind3.Hw, 400);
+
         g.setColor(Color.orange);
         g.fillRect(0, 320, 800, 399);                     //Boden rendern
         if(Main.parallaxscrolling) {
@@ -174,19 +150,6 @@ public class MySnake extends JPanel implements ActionListener {
             }
         }
     }
-//        if (hind1.Hx < me.x + 10 && me.x + 10 < hind1.Hx + hind1.Hw){      //check for each obstacle
-//            if (me.y + 11 >= hind1.Hy){
-//                return true;
-//            }
-//        }
-//        if (hind2.Hx < me.x + 10 && me.x + 10 < hind2.Hx + hind2.Hw){
-//            if (me.y + 11 >= hind2.Hy){
-//                return true;
-//            }
-//        }
-//        if (hind3.Hx < me.x + 10 && me.x + 10 < hind3.Hx + hind3.Hw){
-//            return me.y + 11 >= hind3.Hy;
-//        }
 
         return false;
     }
@@ -259,43 +222,6 @@ public class MySnake extends JPanel implements ActionListener {
 
                                                 //jump mechanic
 
-//        if(me.up && me.y >= 250){
-//            me.setY(me.y - upspeed);
-//        }
-//
-//        if (me.y == 250){
-//            me.up = false;
-//            me.down = true;
-//        }
-//
-//        if (me.down && me.y < 310){
-//            me.setY(me.y + downspeed);
-//        }
-//
-//        if(me.down && me.y == 310){
-//            me.down = false;
-//        }
-
-        //------------------------------Hind-----------------------
-//        hind1.Hx -= 1;                                   //Hindernisse bewegen
-//        hind2.Hx -= 1;
-//        hind3.Hx -= 1;
-
-//        if ((hind1.Hx + hind1.Hw) < 0){                       //wenn hindernisse aus dem Bild, dann neue Position generieren
-//            hind1.Hx = generateNewPosition(1);
-//            hind1.Hy = 300 - ((int) (Math.random() * 7))*3;
-//        }
-//
-//        if ((hind2.Hx + hind2.Hw) < 0){
-//            hind2.Hx = generateNewPosition(2);
-//            hind2.Hy = 300 - ((int) (Math.random() * 7))*3;
-//        }
-//
-//        if ((hind3.Hx + hind3.Hw) < 0){
-//            hind3.Hx = generateNewPosition(3);
-//            hind3.Hy = 300 - ((int) (Math.random() * 7))*3;
-//        }
-
         if (collision()) {                  //player fuer 12 ticks imun machen
             if (!imune) {
                 helth.decrease();
@@ -351,11 +277,6 @@ public class MySnake extends JPanel implements ActionListener {
 //        );
 
     }
-
-
-//    private int generateNewPosition(int id){
-//        return (int)(Math.random() * 100) + 800+800*id;
-//    }
 
 
     private void gameOver(){
@@ -415,55 +336,6 @@ public class MySnake extends JPanel implements ActionListener {
 
     }
 
-//    class Player{
-//
-//        int x;
-//        int y;
-//        boolean up;
-//        boolean down;
-//        Image icon;
-//
-//
-//        Player(){
-//            x = 400;
-//            y = 310;
-//            up = false;
-//            down = false;
-//            icon = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/com/sebi/dot.png")).getImage();
-//        }
-//
-//        void jump() {
-//            if (!this.up && !this.down) {
-//                this.up = true;
-//            }
-//
-//        }
-//
-//        /*void setX(int _x){      //probably redundant bc it's never used
-//            this.x = _x;
-//        }*/
-//
-//        void setY(int _y){
-//            this.y = _y;
-//        }
-//
-//    }
-
-
-    class Hindernis{
-
-        int Hx;
-        int Hy;
-        int Hw;
-
-        Hindernis(int id){
-            Hx = (int)(Math.random() * 100) + 800+id*800;
-            Hy = 300 - ((int) (Math.random() * 7))*3;
-            Hw = 12;
-        }
-
-    }
-
 
     class Sun{
 
@@ -482,18 +354,5 @@ public class MySnake extends JPanel implements ActionListener {
         }
 
     }
-
-
-//    class Health{
-//
-//        int count;
-//        Image icon;
-//
-//        Health(){
-//            count = 4;
-//            icon = new ImageIcon("src/com/sebi/heart.png").getImage(); //TODO: getClass.getResource()
-//        }
-//
-//    }
 
 }
