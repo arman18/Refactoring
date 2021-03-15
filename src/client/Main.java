@@ -1,4 +1,4 @@
-package original;
+package client;
 
 import gameSpeed.*;
 import gameSpeed.GameLevel;

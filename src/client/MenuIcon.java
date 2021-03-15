@@ -1,4 +1,4 @@
-package original;
+package client;
 import health.Health;
 import health.HealthSymbol;
 import java.awt.*;
