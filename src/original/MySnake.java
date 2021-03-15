@@ -8,6 +8,8 @@ import java.io.File;
 import java.net.URL;
 import player.Player;
 import gameSpeed.GameLevel;
+import health.Health;
+import health.HealthSymbol;
 import hindernis.Hind;
 import java.util.Vector;
 public class MySnake extends JPanel implements ActionListener {
@@ -16,7 +18,7 @@ public class MySnake extends JPanel implements ActionListener {
 //    private Hindernis hind1 = new Hindernis(1);
 //    private Hindernis hind2 = new Hindernis(2);
 //    private Hindernis hind3 = new Hindernis(3);
-    private Health health = new Health();
+//    private Health health = new Health();
     private Sun sun = new Sun();
     private BufferedImage bg1;
     private BufferedImage bg2;
@@ -36,10 +38,11 @@ public class MySnake extends JPanel implements ActionListener {
     private int sunIdle = 0;
     private int iters = 0;
     private int count = 0;
-    private int upspeed;
-    private int downspeed;
+//    private int upspeed;
+//    private int downspeed;
     private Vector<Hind> hinds = new Vector<Hind>(3);
-    
+    private Health helth;
+    private HealthSymbol helthSymbol;
     enum SUNSTATE {sunUp, sunDown, moonUp, moonDown}
     
 
@@ -69,6 +72,7 @@ public class MySnake extends JPanel implements ActionListener {
         hinds.get(0).Hx = 600;
         hinds.get(1).Hx = 800;
         hinds.get(2).Hx = 1200;
+        helth = new Health();
 //        hind1.Hx = 600;
 //        hind2.Hx = 800;
 //        hind3.Hx = 1200;
@@ -111,16 +115,21 @@ public class MySnake extends JPanel implements ActionListener {
         g.setColor(me.getColor());
         g.fillRect(me.getPosX(), me.getPosY(), 10, 10);                   //Player rendern
 
-        int abstnd = 30;
-        for (int i = 0; i < health.count; i++){                                 //Herzen rendern
-            int[] xPoints = {i * abstnd, i * abstnd,  12+i*abstnd, 15+i*abstnd,
-                    27+i*abstnd, 27+i*abstnd, 23+i*abstnd, 16+i*abstnd, 16+i*abstnd,
-                    11+i*abstnd, 11+i*abstnd , 4+i*abstnd, i * abstnd};
-            int[] yPoints = {5, 15, 26, 26, 15,  5,  0,  0,  1, 1,  0  , 0, 5};
-            g.setColor(Color.decode("#C91010"));
-            g.fillPolygon(xPoints, yPoints, 13);
+//        int abstnd = 30;
+//        for (int i = 0; i < health.count; i++){                                 //Herzen rendern
+//            int[] xPoints = {i * abstnd, i * abstnd,  12+i*abstnd, 15+i*abstnd,
+//                    27+i*abstnd, 27+i*abstnd, 23+i*abstnd, 16+i*abstnd, 16+i*abstnd,
+//                    11+i*abstnd, 11+i*abstnd , 4+i*abstnd, i * abstnd};
+//            int[] yPoints = {5, 15, 26, 26, 15,  5,  0,  0,  1, 1,  0  , 0, 5};
+//            g.setColor(Color.decode("#C91010"));
+//            g.fillPolygon(xPoints, yPoints, 13);
+//        }
+        helthSymbol = helth.getSymbol();
+        while(helthSymbol!=null){
+            g.setColor(helthSymbol.getColor());
+            g.fillPolygon(helthSymbol.getXpoints(), helthSymbol.getYpoints(), 13);
+            helthSymbol = helth.getSymbol();
         }
-//        System.out.println(hinds.capacity());
         for(int i=0;i<hinds.capacity();i++){
             Hind tempHind = hinds.get(i);
             g.setColor(tempHind.getColor());
@@ -289,7 +298,7 @@ public class MySnake extends JPanel implements ActionListener {
 
         if (collision()) {                  //player fuer 12 ticks imun machen
             if (!imune) {
-                health.count -= 1;
+                helth.decrease();
                 imune = true;
                 iters = count;
             }
@@ -299,7 +308,7 @@ public class MySnake extends JPanel implements ActionListener {
             imune = false;
         }
 
-        if (health.count < 1){      //wenn tot, gameOver
+        if (helth.getLevel() == 0){      //wenn tot, gameOver
             gameOver();
         }
 
@@ -344,9 +353,9 @@ public class MySnake extends JPanel implements ActionListener {
     }
 
 
-    private int generateNewPosition(int id){
-        return (int)(Math.random() * 100) + 800+800*id;
-    }
+//    private int generateNewPosition(int id){
+//        return (int)(Math.random() * 100) + 800+800*id;
+//    }
 
 
     private void gameOver(){
@@ -379,7 +388,12 @@ public class MySnake extends JPanel implements ActionListener {
 
             } else {
                 if (e.getKeyCode() == KeyEvent.VK_P){
-                    if(timer.isRunning()){timer.stop();} else {timer.restart();}
+                    if(timer.isRunning()){
+                        timer.stop();
+                    } 
+                    else {
+                        timer.restart();
+                    }
                 }else {
                     me.jump();
                 }
@@ -389,7 +403,7 @@ public class MySnake extends JPanel implements ActionListener {
                 count = 0;
                 iters = 0;
                 gameover = false;
-                health.count = 4;
+                helth.restart();
                 timer.start();
             }
 
@@ -470,16 +484,16 @@ public class MySnake extends JPanel implements ActionListener {
     }
 
 
-    class Health{
-
-        int count;
-        Image icon;
-
-        Health(){
-            count = 4;
-            icon = new ImageIcon("src/com/sebi/heart.png").getImage(); //TODO: getClass.getResource()
-        }
-
-    }
+//    class Health{
+//
+//        int count;
+//        Image icon;
+//
+//        Health(){
+//            count = 4;
+//            icon = new ImageIcon("src/com/sebi/heart.png").getImage(); //TODO: getClass.getResource()
+//        }
+//
+//    }
 
 }

@@ -1,12 +1,16 @@
 package original;
+import health.Health;
+import health.HealthSymbol;
 import java.awt.*;
 import javax.swing.*;
 
 public class MenuIcon extends JPanel{
 
-
+    Health health;
+    HealthSymbol symbol;
     MenuIcon(){
         setBackground(Color.getHSBColor(0.6f, 0.8f, 0.97f));      //set background
+        health = new Health();
     }
 
     @Override
@@ -17,14 +21,10 @@ public class MenuIcon extends JPanel{
         g.fillOval(200 - 30, 80 - 30, 30, 30);
         //g.fillRect(120, 140, 10, 10);                       //Player rendern
         g.fillRect(120, 140, 10, 5);                       //Player rendern
-        int abstnd = 30;
         for (int i = 0; i < 2; i++){                                                    //Herzen rendern
-            int[] xPoints = {i * abstnd, i * abstnd,  12+i*abstnd, 15+i*abstnd,
-                    27+i*abstnd, 27+i*abstnd, 23+i*abstnd, 16+i*abstnd, 16+i*abstnd,
-                    11+i*abstnd, 11+i*abstnd , 4+i*abstnd, i * abstnd};
-            int[] yPoints = {5, 15, 26, 26, 15,  5,  0,  0,  1, 1,  0  , 0, 5};
-            g.setColor(Color.decode("#C91010"));
-            g.fillPolygon(xPoints, yPoints, 13);
+            symbol = health.getSymbol();
+            g.setColor(Color.green);
+            g.fillPolygon(symbol.getXpoints(),symbol.getYpoints(), 13);
         }
 
         g.setColor(Color.green);
